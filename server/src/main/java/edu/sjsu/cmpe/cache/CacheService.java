@@ -32,8 +32,7 @@ public class CacheService extends Service<CacheServiceConfiguration> {
     public void run(CacheServiceConfiguration configuration,
             Environment environment) throws Exception {
         /** Cache APIs */
-        ConcurrentHashMap<Long, Entry> map = new ConcurrentHashMap<Long, Entry>();
-        CacheInterface cache = new ChronicleMapCache(map);
+        CacheInterface cache = new ChronicleMapCache(configuration.getHttpConfiguration().getPort());
         environment.addResource(new CacheResource(cache));
         log.info("Loaded resources");
 

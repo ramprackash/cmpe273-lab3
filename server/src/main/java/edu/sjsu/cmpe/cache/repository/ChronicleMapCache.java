@@ -24,25 +24,40 @@ public class ChronicleMapCache implements CacheInterface {
         return l.toString();
     }
 
-    static Map<Long, String> createChronicleMap() {
+    static Map<Long, String> createChronicleMap(int port) {
         try {
-            File file = new File("src/main/resources/cMap1.dat");
-            ChronicleMapBuilder<Long, String> builder = ChronicleMapBuilder.of(Long.class, String.class).entries(1000);
-            return builder.createPersistedTo(file);
+            if (port == 3000) {
+                File file = new File("src/main/resources/cMap_A.dat");
+                ChronicleMapBuilder<Long, String> builder = ChronicleMapBuilder.of(Long.class, String.class).entries(1000);
+                return builder.createPersistedTo(file);
+            }
+            if (port == 3001) {
+                File file = new File("src/main/resources/cMap_B.dat");
+                ChronicleMapBuilder<Long, String> builder = ChronicleMapBuilder.of(Long.class, String.class).entries(1000);
+                return builder.createPersistedTo(file);
+            }
+            if (port == 3002) {
+                File file = new File("src/main/resources/cMap_C.dat");
+                ChronicleMapBuilder<Long, String> builder = ChronicleMapBuilder.of(Long.class, String.class).entries(1000);
+                return builder.createPersistedTo(file);
+            }
+
+            System.out.println("Invalid port!!" + port);
         } catch(IOException e){
             e.printStackTrace();
         }
         return null;
     }
 
-    public ChronicleMapCache(ConcurrentHashMap<Long, Entry> entries) {
-        cMap = createChronicleMap();
+    public ChronicleMapCache(int port) {
+        //System.out.println("Starting server " + args[2]);
+        cMap = createChronicleMap(port);
     }
 
     @Override
     public Entry save(Entry newEntry) {
         checkNotNull(newEntry, "newEntry instance must not be null");
-        System.out.println("Storing: " + newEntry.getValue() + "at" + newEntry.getKey());
+        System.out.println("Storing: " + newEntry.getValue() + " at " + newEntry.getKey());
         cMap.putIfAbsent(newEntry.getKey(), newEntry.getValue());
 
         return newEntry;
@@ -61,9 +76,10 @@ public class ChronicleMapCache implements CacheInterface {
     @Override
     public List<Entry> getAll() {
         ArrayList<Entry> ale = new ArrayList<Entry> ();
-        for (String i : cMap.values()) {
+        for (Long i : cMap.keySet()) {
             Entry e = new Entry();
-            e.setValue(i);
+            e.setValue(cMap.get(i));
+            e.setKey(i);
             ale.add(e);
         }
         return ale;

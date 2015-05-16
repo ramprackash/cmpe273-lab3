@@ -47,7 +47,7 @@ public class Client {
                             cacheArray[hash].put(i+1, data[i]);
                     }
             }
-            
+
             /* GET data using Consistent Hashing */
             for (int i = 0; i < 10; i++) {
                     HashCode hc = Hashing.md5().newHasher().putLong(i+1)
