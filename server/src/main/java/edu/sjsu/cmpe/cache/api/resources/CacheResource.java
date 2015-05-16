@@ -27,7 +27,7 @@ public class CacheResource {
      * CacheResource constructor
      * 
      * @param cache
-     *            a InMemoryCache instance
+     *            a ChronicleMapCache instance
      */
     public CacheResource(CacheInterface cache) {
         this.cache = cache;

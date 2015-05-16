@@ -2,6 +2,7 @@ package edu.sjsu.cmpe.cache;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import edu.sjsu.cmpe.cache.repository.ChronicleMapCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,6 @@ import edu.sjsu.cmpe.cache.api.resources.CacheResource;
 import edu.sjsu.cmpe.cache.config.CacheServiceConfiguration;
 import edu.sjsu.cmpe.cache.domain.Entry;
 import edu.sjsu.cmpe.cache.repository.CacheInterface;
-import edu.sjsu.cmpe.cache.repository.InMemoryCache;
 
 public class CacheService extends Service<CacheServiceConfiguration> {
 
@@ -33,7 +33,7 @@ public class CacheService extends Service<CacheServiceConfiguration> {
             Environment environment) throws Exception {
         /** Cache APIs */
         ConcurrentHashMap<Long, Entry> map = new ConcurrentHashMap<Long, Entry>();
-        CacheInterface cache = new InMemoryCache(map);
+        CacheInterface cache = new ChronicleMapCache(map);
         environment.addResource(new CacheResource(cache));
         log.info("Loaded resources");
 
